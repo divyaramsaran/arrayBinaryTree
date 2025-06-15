@@ -10,7 +10,6 @@ function ArrayChallenge(strArr) {
   return integerArray.reduce(
     ([isBinaryTree, uniqueList], integers) => {
       const hid = uniqueList.reduce((init, list) => {
-        
         if (list.includes(integers[0]) || list.includes(integers[1])) {
           return true;
         }
@@ -18,7 +17,7 @@ function ArrayChallenge(strArr) {
         uniqueList.push(integers);
         return false;
       });
-      
+
       return [hid, uniqueList];
     },
     [true, []]
