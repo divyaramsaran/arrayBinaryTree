@@ -5,6 +5,13 @@ const stringToNum = (str) => {
 function ArrayChallenge(strArr) {
   // code goes here
   const integerArray = strArr.map(stringToNum);
+  const childNodes = integerArray.map(([child, parent]) => child);
+  const rootNode = integerArray.filter(
+    ([child, parent]) => !childNodes.includes(parent)
+  );
+
+  console.log(rootNode);
+
   return integerArray;
 }
 
