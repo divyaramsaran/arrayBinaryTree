@@ -21,11 +21,11 @@ const isBinaryTree = (integerArray, rootNode) => {
     ([child, root]) => rootNode[0] === root
   );
 
-  if (nodeEntries.length > 2) {
+  if (nodeEntries.length > 2 || rootNode.length > 2) {
     return false;
   }
 
-  while (true) {
+  while (nodeEntries.length !== 0) {
     const element = nodeEntries[0];
 
     const entry = element !== undefined ? entries(integerArray, element) : [];
@@ -34,20 +34,16 @@ const isBinaryTree = (integerArray, rootNode) => {
       return false;
     }
 
-    if (nodeEntries.length === 0) {
-      return true;
-    }
-
     if (entry.length !== 0) {
       entry.map((list) => nodeEntries.push(list));
     }
 
     nodeEntries.shift();
   }
+  return true;
 };
 
 function ArrayChallenge(strArr) {
-  // code goes here
   const integerArray = stringToNum(strArr);
   const childNodes = integerArray.map(([child, parent]) => child);
   const rootNode = integerArray
@@ -57,14 +53,6 @@ function ArrayChallenge(strArr) {
   return isBinaryTree(integerArray, rootNode);
 }
 
-const strArr = [
-  "(1,2)",
-  "(2,4)",
-  "(5,7)",
-  "(7,2)",
-  "(9,5)",
-  "(10,5)",
-  "(11, 5)",
-];
+const strArr = ["(1,2)", "(2,4)", "(5,7)", "(7,2)", "(9,5)", "(3,5)"];
 
 console.log(ArrayChallenge(strArr));
