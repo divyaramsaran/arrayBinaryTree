@@ -1,6 +1,6 @@
-const stringToNum = (str) => {
-  return str.map((element) =>
-    element
+const parseEdges = (stringParis) => {
+  return stringParis.map((currentNode) =>
+    currentNode
       .replaceAll("(", "")
       .replaceAll(")", "")
       .split(",")
@@ -8,26 +8,29 @@ const stringToNum = (str) => {
   );
 };
 
-const isBinaryTree = (integerArray, nodeEntries) => {
-  while (nodeEntries.length !== 0) {
-    const element = nodeEntries[0];
-    const entry = element !== undefined ? entries(integerArray, element) : [];
+const isBinaryTree = (integerArray, nodesToVisit) => {
+  while (nodesToVisit.length !== 0) {
+    const currentNode = nodesToVisit[0];
+    const children =
+      currentNode !== undefined
+        ? getChildrenForParent(integerArray, currentNode)
+        : [];
 
-    if (entry.length > 2) {
+    if (children.length > 2) {
       return false;
     }
 
-    if (entry.length !== 0) {
-      entry.map((list) => nodeEntries.push(list));
+    if (children.length !== 0) {
+      children.forEach((child) => nodesToVisit.push(child));
     }
 
-    nodeEntries.shift();
+    nodesToVisit.shift();
   }
 
   return true;
 };
 
-const entries = (integerArray, target) => {
+const getChildrenForParent = (integerArray, target) => {
   return integerArray.filter(([child, root]) => target[0] === root);
 };
 
@@ -36,27 +39,27 @@ const validateBinarytree = (integerArray, rootNode) => {
     return true;
   }
 
-  const nodeEntries = integerArray.filter(
+  const initialChildren = integerArray.filter(
     ([child, root]) => rootNode[0] === root
   );
 
-  if (nodeEntries.length > 2 || rootNode.length > 2) {
+  if (initialChildren.length > 2 || rootNode.length > 2) {
     return false;
   }
 
-  return isBinaryTree(integerArray, nodeEntries);
+  return isBinaryTree(integerArray, initialChildren);
 };
 
 function ArrayChallenge(strArr) {
-  const integerArray = stringToNum(strArr);
-  const childNodes = integerArray.map(([child, parent]) => child);
-  const rootNode = integerArray
+  const edges = parseEdges(strArr);
+  const childNodes = edges.map(([child, parent]) => child);
+  const rootNode = edges
     .filter(([child, parent]) => !childNodes.includes(parent))
     .flat();
 
-  return validateBinarytree(integerArray, rootNode);
+  return validateBinarytree(edges, rootNode);
 }
 
-const strArr = ["(1,2)", "(2,4)", "(5,7)", "(7,2)", "(9,5)", "(3,5)"];
+const strArr = ["(1,2)", "(3,2)", "(2,12)", "(5,3)"];
 
 console.log(ArrayChallenge(strArr));
